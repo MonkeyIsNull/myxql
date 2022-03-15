@@ -557,6 +557,12 @@ defmodule MyXQL do
           {:ok, MyXQL.Query.t(), MyXQL.Result.t()} | {:error, Exception.t()}
   def execute(conn, %MyXQL.Query{} = query, params \\ [], opts \\ []) do
     IO.puts "Execute our prepared query pass to DBConnection.execute ... return single result"
+    IO.puts "-query-"
+    IO.inspect(query)
+    IO.puts "-params-"
+    IO.inspect(params)
+    IO.puts "-opts-"
+    IO.inspect(opts)
     r = DBConnection.execute(conn, query, params, opts)
     IO.puts "done with execute ... callback?"
     r
