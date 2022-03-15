@@ -387,7 +387,9 @@ defmodule MyXQL do
   def prepare(conn, name, statement, opts \\ []) when is_iodata(name) and is_iodata(statement) do
     IO.puts "main call to prepare..."
     query = %MyXQL.Query{name: name, statement: statement}
-    DBConnection.prepare(conn, query, opts)
+    r = DBConnection.prepare(conn, query, opts)
+    IO.puts "Done with DBConnection.prepare..."
+    r
   end
 
   @doc """
@@ -555,7 +557,9 @@ defmodule MyXQL do
           {:ok, MyXQL.Query.t(), MyXQL.Result.t()} | {:error, Exception.t()}
   def execute(conn, %MyXQL.Query{} = query, params \\ [], opts \\ []) do
     IO.puts "Execute our prepared query pass to DBConnection.execute ... return single result"
-    DBConnection.execute(conn, query, params, opts)
+    r = DBConnection.execute(conn, query, params, opts)
+    IO.puts "done with execute ... callback?"
+    r
   end
 
   @doc """
