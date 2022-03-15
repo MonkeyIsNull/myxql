@@ -64,10 +64,12 @@ defmodule MyXQL.Connection do
     query = rename_query(state, query)
 
     if cached_query = queries_get(state, query) do
+      IO.puts "handle_prepare: using cached query..."
       {:ok, cached_query, %{state | last_ref: cached_query.ref}}
     else
       case prepare(query, state) do
         {:ok, _, _} = ok ->
+          IO.puts "handle_prepare: ok..."
           ok
 
         {:error, %MyXQL.Error{mysql: %{name: :ER_UNSUPPORTED_PS}}, state} = error ->
@@ -79,6 +81,7 @@ defmodule MyXQL.Connection do
           end
 
         other ->
+          IO.puts "handle_prepare: other"
           other
       end
     end
