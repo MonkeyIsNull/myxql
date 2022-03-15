@@ -565,6 +565,8 @@ defmodule MyXQL do
     IO.inspect(opts)
     r = DBConnection.execute(conn, query, params, opts)
     IO.puts "done with execute ... callback?"
+    IO.puts "Dump result"
+    IO.inspect(r)
     r
   end
 
