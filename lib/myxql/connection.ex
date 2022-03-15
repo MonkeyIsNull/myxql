@@ -328,7 +328,7 @@ defmodule MyXQL.Connection do
           status_flags: status_flags,
           num_warnings: num_warnings
         ) = resultset
-
+        IO.puts("connection.result when is_list -> rows: #{rows}")
         columns = Enum.map(column_defs, &elem(&1, 1))
 
         result = %Result{
