@@ -283,6 +283,7 @@ defmodule MyXQL.Connection do
          query,
          state
        ) do
+    IO.puts("ok_packet result")
     result = %Result{
       connection_id: state.client.connection_id,
       last_insert_id: last_insert_id,
@@ -306,7 +307,7 @@ defmodule MyXQL.Connection do
          state
        ) do
     columns = Enum.map(column_defs, &elem(&1, 1))
-
+    IO.puts("plain resultset, no is_list")
     result = %Result{
       connection_id: state.client.connection_id,
       columns: columns,
@@ -328,6 +329,7 @@ defmodule MyXQL.Connection do
           status_flags: status_flags,
           num_warnings: num_warnings
         ) = resultset
+        # No, we NEVER get here
         IO.puts("connection.result when is_list -> rows: #{rows}")
         columns = Enum.map(column_defs, &elem(&1, 1))
 
