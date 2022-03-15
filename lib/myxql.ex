@@ -240,20 +240,24 @@ defmodule MyXQL do
   @spec query(conn, iodata, list, [query_option()]) ::
           {:ok, MyXQL.Result.t()} | {:error, Exception.t()}
   def query(conn, statement, params \\ [], options \\ []) when is_iodata(statement) do
+    IO.puts "called main query..."
     name = options[:cache_statement]
     query_type = options[:query_type] || :binary
 
     cond do
       name != nil ->
         statement = IO.iodata_to_binary(statement)
+        IO.puts "called named query..."
         query = %MyXQL.Query{name: name, statement: statement, cache: :statement}
         do_query(conn, query, params, options)
 
       query_type in [:binary, :binary_then_text] ->
+        IO.puts "call unnamed query binary"
         query = %MyXQL.Query{name: "", statement: statement}
         do_query(conn, query, params, options)
 
       query_type == :text ->
+        IO.puts "call TextQuery..."
         query = %MyXQL.TextQuery{statement: statement}
         do_query(conn, query, params, options)
     end
@@ -381,6 +385,7 @@ defmodule MyXQL do
   @spec prepare(conn(), iodata(), iodata(), [option()]) ::
           {:ok, MyXQL.Query.t()} | {:error, Exception.t()}
   def prepare(conn, name, statement, opts \\ []) when is_iodata(name) and is_iodata(statement) do
+    IO.puts "main call to prepare..."
     query = %MyXQL.Query{name: name, statement: statement}
     DBConnection.prepare(conn, query, opts)
   end
@@ -549,6 +554,7 @@ defmodule MyXQL do
   @spec execute(conn(), MyXQL.Query.t(), list(), [option()]) ::
           {:ok, MyXQL.Query.t(), MyXQL.Result.t()} | {:error, Exception.t()}
   def execute(conn, %MyXQL.Query{} = query, params \\ [], opts \\ []) do
+    IO.puts "Execute our prepared query pass to DBConnection.execute ... return single result"
     DBConnection.execute(conn, query, params, opts)
   end
 
@@ -614,6 +620,7 @@ defmodule MyXQL do
   def close(conn, query, opts \\ [])
 
   def close(conn, %MyXQL.Query{} = query, opts) do
+    IO.puts "close prepared query.."
     case DBConnection.close(conn, query, opts) do
       {:ok, _} ->
         :ok
